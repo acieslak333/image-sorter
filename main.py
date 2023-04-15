@@ -70,7 +70,6 @@ def main():
     image = read_image('lena.png')
     reduced_image = reduce_image_colors(image, 32)
     masks = get_image_masks(reduced_image)
-    print(len(masks))
     image = sort_image(image, 0)
     show_image(image)
     
