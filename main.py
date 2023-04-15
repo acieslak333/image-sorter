@@ -39,8 +39,22 @@ def sort_image(image, axis=-1):
     """
     return np.sort(image, kind='mergesort', axis=axis)
 
+def reduce_image_colors(image, depth=1):
+    """Reduces number of colos in image
+    
+    Args:
+        - image: RGB image to reduce colors in
+        - depth: amount of reduction of colors, 1 is no reduction, 256 is max
+
+    Returns:
+        - redused_image: image with reduced colors rumber
+    """
+    image = np.asarray(image / depth, np.int32) * depth
+    return image
+
 def main():
     image = read_image('lena.png')
+    image = reduce_image_colors(image, 64)
     image = sort_image(image, 0)
     show_image(image)
     
