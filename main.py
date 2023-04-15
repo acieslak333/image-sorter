@@ -25,9 +25,10 @@ def show_image(image):
     """
     plt.figure(figsize=FIGSIZE)
     plt.imshow(image)
+    plt.axis('off')
     plt.show()
 
-def sort_image(image, axis=-1):
+def sort_image(image, axis=0):
     """Sort image along one of axis
     
     Args:
@@ -62,15 +63,19 @@ def get_image_masks(image):
         - masks: masks for each color in image
     """
     image_values = np.unique(image)
-    masks = [image[image == value] for value in image_values]
-    return masks
+    masks = [image == value for value in image_values]
+    return np.array(masks, dtype = np.int8)[:, :, :, 0]
 
 
 def main():
     image = read_image('lena.png')
-    reduced_image = reduce_image_colors(image, 32)
+    reduced_image = reduce_image_colors(image.copy(), 64)
     masks = get_image_masks(reduced_image)
-    image = sort_image(image, 0)
+    print(masks.shape)
+    for mask in masks:
+        masked_image = cv2.bitwise_and(image, image, mask=mask)
+        show_image(masked_image)
+        show_image(sort_image(masked_image))
     show_image(image)
     
 
