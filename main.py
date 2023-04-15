@@ -52,9 +52,25 @@ def reduce_image_colors(image, depth=1):
     image = np.asarray(image / depth, np.int32) * depth
     return image
 
+def get_image_masks(image):
+    """Gets image masks based on its unique values
+    
+    Args:
+        - image: RGB image to get masks from
+
+    Returns:
+        - masks: masks for each color in image
+    """
+    image_values = np.unique(image)
+    masks = [image[image == value] for value in image_values]
+    return masks
+
+
 def main():
     image = read_image('lena.png')
-    image = reduce_image_colors(image, 64)
+    reduced_image = reduce_image_colors(image, 32)
+    masks = get_image_masks(reduced_image)
+    print(len(masks))
     image = sort_image(image, 0)
     show_image(image)
     
